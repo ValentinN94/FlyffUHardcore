@@ -11,6 +11,8 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.browser)
 
 # This is needed on Linux manjaro for URL to load
+# For other OS use the following line
+# app = QApplication(sys.argv)
 app = QApplication(['', '--no-sandbox'])
 window = MainWindow()
 window.setWindowTitle('FlyffHarcore')
