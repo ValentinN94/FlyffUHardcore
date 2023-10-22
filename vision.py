@@ -72,6 +72,7 @@ class Vision:
             # imwrite() will smartly format our output image based on the extension we give it
             # https://docs.opencv.org/3.4/d4/da8/group__imgcodecs.html#gabbc7ef1aa2edfaa87772f1202d67e0ce
             cv.imwrite('result.jpg', haystack_img)
+            return True
 
         else:
             print('Needle not found.')
