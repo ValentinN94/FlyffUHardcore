@@ -14,3 +14,5 @@ app = QApplication([])
 window = WebBrowser()
 window.setWindowTitle('FlyffHarcore')
 window.show()
+app.exec_()
+
