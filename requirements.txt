@@ -1,7 +1,7 @@
 contourpy==1.1.1
 cycler==0.12.1
 fonttools==4.43.1
-importlib-resources== 6.1.0
+importlib-resources==6.1.0
 kiwisolver==1.4.5
 matplotlib==3.8.0
 msvc-runtime==14.34.31931
@@ -15,7 +15,7 @@ PyQt5==5.15.10
 PyQt5-Qt5==5.15.2
 PyQt5-sip==12.13.0
 PyQtWebEngine==5.15.6
-PyQtWebEngine-Qt5=5.15.2
+PyQtWebEngine-Qt5==5.15.2
 pytesseract==0.3.10
 python-dateutil==2.8.2
 pywin32==306
