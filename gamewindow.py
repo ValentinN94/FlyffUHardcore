@@ -12,7 +12,7 @@ class OverwatchWorker(QObject):
 
     def run(self):
         script_directory = os.path.dirname(os.path.abspath(__file__))
-        image_path = os.path.join(script_directory, 'images', 'lvl_1_char.PNG')
+        image_path = os.path.join(script_directory, 'images', 'new_char_original.PNG')
 
         wincap = WindowCapture('FlyffHarcore')
         new_char = Vision(image_path)

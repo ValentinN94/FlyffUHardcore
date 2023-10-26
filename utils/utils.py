@@ -69,37 +69,69 @@ import cv2
 #
 #     plt.show()
 
-import cv2
-from matplotlib import pyplot as plt
-import os
+#exmaple of matching and searching for name of char
+# #####################################################################
+# import cv2
+#
+#
+# # script_directory = os.path.dirname(os.path.abspath(__file__))
+#
+# img = cv2.imread("C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\utils\\screenshoot_lvl_1.PNG", 0)
+# img2 = img.copy()
+# template = cv2.imread('C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\utils\\lvl_1_char.PNG', 0)
+# w, h = template.shape[::-1]
+#
+# img = img2.copy()
+#
+#
+# # Apply template Matching
+# res = cv2.matchTemplate(img, template, cv2.TM_CCOEFF_NORMED)
+# min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+# top_left = max_loc
+# bottom_right = (top_left[0] + w, top_left[1] + h)
+#
+# result = cv2.rectangle(img, top_left,bottom_right , color=(0, 255, 255), lineType=cv2.LINE_4)
+#
+# user_name_bottom_right = (top_left[0], bottom_right[1])
+# user_name_top_left = (top_left[1], 0)
+#
+# result = cv2.rectangle(img, top_left, bottom_right , color=(0, 255, 255), lineType=cv2.LINE_4)
+# cv2.drawMarker(img, user_name_bottom_right, color=[0, 0, 0], thickness=5,
+#    markerType= cv2.MARKER_TILTED_CROSS, line_type=cv2.LINE_AA,
+#    markerSize=5)
+#
+# cv2.drawMarker(img, user_name_top_left, color=[0, 255, 0], thickness=5,
+#    markerType= cv2.MARKER_TILTED_CROSS, line_type=cv2.LINE_AA,
+#    markerSize=5)
+#
+# result = cv2.rectangle(img, user_name_top_left, user_name_bottom_right , color=(0, 255, 255), lineType=cv2.LINE_4)
+#
+# cv2.imshow('Result', result)
+# cv2.waitKey()
+#
+
+#Text extraction example
+###################################################################################
+import pytesseract
 from PIL import Image
+import cv2
 
-# script_directory = os.path.dirname(os.path.abspath(__file__))
+image = Image.open('C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\utils\\screenshoot_lvl_1.PNG')
 
-img = cv2.imread("C:\\Users\\vnegru\\PycharmProjects\\FlyffUHardcore\\utils\\screenshoot_lvl_1.PNG", 0)
-img2 = img.copy()
-template = cv2.imread('C:\\Users\\vnegru\\PycharmProjects\\FlyffUHardcore\\utils\\lvl_1_char.PNG', 0)
-w, h = template.shape[::-1]
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-img = img2.copy()
+# Define the region you want to extract text from (in pixel coordinates)
+x1, y1, x2, y2 = 4, 0, 146, 25
+#username_bot_right = (146, 25)
+#username_top_left =  (4, 0)
 
+# Crop the image to the specified region
+cropped_image = image.crop((x1, y1, x2, y2))
+cropped_image.save("geeks.PNG")
 
-# Apply template Matching
-res = cv2.matchTemplate(img, template, cv2.TM_CCOEFF_NORMED)
-min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-top_left = max_loc
-bottom_right = (top_left[0] + w, top_left[1] + h)
+# Perform OCR on the cropped image
+text = pytesseract.image_to_string(cropped_image)
 
-#result = cv2.rectangle(img, top_left,bottom_right , color=(0, 255, 255), lineType=cv2.LINE_4)
-
-x1 = (0, top_left[0])
-x2 = top_left
-y1 = (top_left[0],top_left[1])
-y2 = bottom_right
-
-result = cv2.rectangle(img, x1,y2 , color=(0, 255, 255), lineType=cv2.LINE_4)
-
-cv2.imshow('Result', result)
-cv2.waitKey()
-
-
+# Print the extracted text
+print("Extracted Text:")
+print(text)
