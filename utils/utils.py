@@ -112,26 +112,92 @@ import cv2
 
 #Text extraction example
 ###################################################################################
+# import pytesseract
+# from PIL import Image
+# import cv2
+#
+# image = Image.open('C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\utils\\screenshoot_lvl_1.PNG')
+#
+# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+#
+# # Define the region you want to extract text from (in pixel coordinates)
+# x1, y1, x2, y2 = 4, 0, 146, 25
+# #username_bot_right = (146, 25)
+# #username_top_left =  (4, 0)
+#
+# # Crop the image to the specified region
+# cropped_image = image.crop((x1, y1, x2, y2))
+# cropped_image.save("geeks.PNG")
+#
+# # Perform OCR on the cropped image
+# text = pytesseract.image_to_string(cropped_image)
+#
+# # Print the extracted text
+# print("Extracted Text:")
+# print(text)
+
+#Optimization of text detection
+####################################################################################################################
 import pytesseract
 from PIL import Image
-import cv2
+from src.imagetotext.textrecognition import ImageToText
+from src.widgets.charstatus import CharStatus
+import numpy as np
+from matplotlib import pyplot as plt
 
-image = Image.open('C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\utils\\screenshoot_lvl_1.PNG')
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-# Define the region you want to extract text from (in pixel coordinates)
-x1, y1, x2, y2 = 4, 0, 146, 25
-#username_bot_right = (146, 25)
-#username_top_left =  (4, 0)
+
+image = Image.open('C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\utils\\screenshoot_lvl_1.PNG')
+
+img = cv2.imread("C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\utils\\screenshoot_lvl_1.PNG", cv2.IMREAD_GRAYSCALE)
+img2 = img.copy()
+#current_directory = os.getcwd()
+#image_template = os.path.join(current_directory, 'images', 'char_status', 'LVL_target.PNG')
+template = cv2.imread('C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\images\\char_status\\LVL_target.PNG',  cv2.IMREAD_GRAYSCALE)
+w, h = template.shape[::-1]
+
+# Apply template Matching
+res = cv2.matchTemplate(img, template, cv2.TM_CCOEFF_NORMED)
+min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+top_left = max_loc
+bottom_right = (top_left[0] + w, top_left[1] + h)
+
+
+
+new_targets = CharStatus(top_left, bottom_right)
+
+username_top_left, username_bottom_right = new_targets.usernamename_coordonates()
+
+# result = cv2.rectangle(img, username_top_left, username_bottom_right , color=(0, 255, 255), lineType=cv2.LINE_4)
+result = img[username_top_left[1]:username_bottom_right[1], username_top_left[0]:username_bottom_right[0]]
+
+img2 = cv2.medianBlur(result,3)
+ret,th1 = cv2.threshold(img2,127,255,cv2.THRESH_BINARY)
+th2 = cv2.adaptiveThreshold(img2,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,11,2)
+th3 = cv2.adaptiveThreshold(img2,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+titles = ['Original Image', 'Global Thresholding (v = 127)',
+ 'Adaptive Mean Thresholding', 'Adaptive Gaussian Thresholding']
+images = [result, th1, th2, th3]
+for i in range(4):
+    plt.subplot(2,2,i+1),plt.imshow(images[i],'gray')
+    plt.title(titles[i])
+    plt.xticks([]),plt.yticks([])
+plt.show()
+#
+text = pytesseract.image_to_string(th2)
+print(text)
+
+
 
 # Crop the image to the specified region
-cropped_image = image.crop((x1, y1, x2, y2))
-cropped_image.save("geeks.PNG")
-
-# Perform OCR on the cropped image
-text = pytesseract.image_to_string(cropped_image)
-
-# Print the extracted text
-print("Extracted Text:")
-print(text)
+# cropped_image = image.crop((x1, y1, x2, y2))
+# cropped_image.save("geeks.PNG")
+#
+# # Perform OCR on the cropped image
+#
+#
+# # Print the extracted text
+# print("Extracted Text:")
+# print(text)
