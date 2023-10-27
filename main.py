@@ -1,20 +1,13 @@
 from time import time
 from windowcapture import WindowCapture
 from vision import Vision
-import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QMessageBox
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
+
 import os
 
 script_directory = os.path.dirname(os.path.abspath(__file__))
 
 image_path = os.path.join(script_directory, 'images', 'new_char_original.PNG')
 
-# class Worker(QObject):
-#     progress = pyqtSignal(int)
-#     completed = pyqtSignal(int)
-#
-#     @pyqtSlot(int)
 def overwatch():
     # Your main script logic here
     wincap = WindowCapture('FlyffHarcore')
