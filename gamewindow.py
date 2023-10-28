@@ -1,38 +1,9 @@
-import os
-from time import time
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, QThread, QUrl
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
+from PyQt5.QtCore import pyqtSlot, QThread, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from windowcapture import WindowCapture
-from vision import Vision
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 
-# Create a worker class that subclasses QObject for running the 'overwatch' function in a separate thread.
-class OverwatchWorker(QObject):
-    finished = pyqtSignal(bool)
+from src.threads.challenge import OverwatchWorker
 
-    def run(self):
-        script_directory = os.path.dirname(os.path.abspath(__file__))
-        image_path = os.path.join(script_directory, 'images', 'new_char_original.PNG')
-
-        wincap = WindowCapture('FlyffHarcore')
-        new_char = Vision(image_path)
-
-        loop_time = time()
-        wincap.start()
-        while True:
-            if wincap.screenshot is None:
-                continue
-
-            points = new_char.find(wincap.screenshot)
-
-            print('FPS {}'.format(1 / (time() - loop_time)))
-            loop_time = time()
-
-            if points:
-                self.finished.emit(True)
-                return
-
-        self.finished.emit(False)
 
 # Create the main application window using QMainWindow.
 class WebBrowser(QMainWindow):
@@ -80,6 +51,8 @@ class WebBrowser(QMainWindow):
     def on_overwatch_finished(self, success):
         if success:
             print("Overwatch finished successfully.")
+            top_left, bottom_right = self.overwatch_worker.points
+            print(top_left, bottom_right)
         else:
             print("Overwatch failed.")
         self.overwatch_thread.quit()
