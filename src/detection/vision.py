@@ -1,17 +1,12 @@
-import cv2
 import cv2 as cv
-import numpy as np
-
 
 class Vision:
 
-    # properties
     needle_img = None
     needle_w = 0
     needle_h = 0
     method = None
 
-    # constructor
     def __init__(self, needle_img_path, method=cv.TM_CCOEFF_NORMED):
         # load the image we're trying to match
         # https://docs.opencv.org/4.2.0/d4/da8/group__imgcodecs.html
@@ -73,7 +68,7 @@ class Vision:
             # imwrite() will smartly format our output image based on the extension we give it
             # https://docs.opencv.org/3.4/d4/da8/group__imgcodecs.html#gabbc7ef1aa2edfaa87772f1202d67e0ce
             cv.imwrite('result.jpg', haystack_img)
-            return True
+            return top_left, bottom_right
 
         else:
             print('Needle not found.')
