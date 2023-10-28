@@ -138,56 +138,56 @@ import cv2
 
 #Optimization of text detection
 ####################################################################################################################
-import pytesseract
-from PIL import Image
-from src.imagetotext.textrecognition import ImageToText
-from src.widgets.charstatus import CharStatus
-import numpy as np
-from matplotlib import pyplot as plt
-
-
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-
-
-image = Image.open('C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\utils\\screenshoot_lvl_1.PNG')
-
-img = cv2.imread("C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\utils\\screenshoot_lvl_1.PNG", cv2.IMREAD_GRAYSCALE)
-img2 = img.copy()
-#current_directory = os.getcwd()
-#image_template = os.path.join(current_directory, 'images', 'char_status', 'LVL_target.PNG')
-template = cv2.imread('C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\images\\char_status\\LVL_target.PNG',  cv2.IMREAD_GRAYSCALE)
-w, h = template.shape[::-1]
-
-# Apply template Matching
-res = cv2.matchTemplate(img, template, cv2.TM_CCOEFF_NORMED)
-min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-top_left = max_loc
-bottom_right = (top_left[0] + w, top_left[1] + h)
-
-
-
-new_targets = CharStatus(top_left, bottom_right)
-
-username_top_left, username_bottom_right = new_targets.usernamename_coordonates()
-
-# result = cv2.rectangle(img, username_top_left, username_bottom_right , color=(0, 255, 255), lineType=cv2.LINE_4)
-result = img[username_top_left[1]:username_bottom_right[1], username_top_left[0]:username_bottom_right[0]]
-
-img2 = cv2.medianBlur(result,3)
-ret,th1 = cv2.threshold(img2,127,255,cv2.THRESH_BINARY)
-th2 = cv2.adaptiveThreshold(img2,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,11,2)
-th3 = cv2.adaptiveThreshold(img2,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
-titles = ['Original Image', 'Global Thresholding (v = 127)',
- 'Adaptive Mean Thresholding', 'Adaptive Gaussian Thresholding']
-images = [result, th1, th2, th3]
-for i in range(4):
-    plt.subplot(2,2,i+1),plt.imshow(images[i],'gray')
-    plt.title(titles[i])
-    plt.xticks([]),plt.yticks([])
-plt.show()
+# import pytesseract
+# from PIL import Image
+# from src.imagetotext.textrecognition import ImageToText
+# from src.widgets.charstatus import CharStatus
+# import numpy as np
+# from matplotlib import pyplot as plt
 #
-text = pytesseract.image_to_string(th2)
-print(text)
+#
+# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+#
+#
+# image = Image.open('C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\utils\\screenshoot_lvl_1.PNG')
+#
+# img = cv2.imread("C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\utils\\screenshoot_lvl_1.PNG", cv2.IMREAD_GRAYSCALE)
+# img2 = img.copy()
+# #current_directory = os.getcwd()
+# #image_template = os.path.join(current_directory, 'images', 'char_status', 'LVL_target.PNG')
+# template = cv2.imread('C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\images\\char_status\\LVL_target.PNG',  cv2.IMREAD_GRAYSCALE)
+# w, h = template.shape[::-1]
+#
+# # Apply template Matching
+# res = cv2.matchTemplate(img, template, cv2.TM_CCOEFF_NORMED)
+# min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+# top_left = max_loc
+# bottom_right = (top_left[0] + w, top_left[1] + h)
+#
+#
+#
+# new_targets = CharStatus(top_left, bottom_right)
+#
+# username_top_left, username_bottom_right = new_targets.usernamename_coordonates()
+#
+# # result = cv2.rectangle(img, username_top_left, username_bottom_right , color=(0, 255, 255), lineType=cv2.LINE_4)
+# result = img[username_top_left[1]:username_bottom_right[1], username_top_left[0]:username_bottom_right[0]]
+#
+# img2 = cv2.medianBlur(result,3)
+# ret,th1 = cv2.threshold(img2,127,255,cv2.THRESH_BINARY)
+# th2 = cv2.adaptiveThreshold(img2,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,11,2)
+# th3 = cv2.adaptiveThreshold(img2,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+# titles = ['Original Image', 'Global Thresholding (v = 127)',
+#  'Adaptive Mean Thresholding', 'Adaptive Gaussian Thresholding']
+# images = [result, th1, th2, th3]
+# for i in range(4):
+#     plt.subplot(2,2,i+1),plt.imshow(images[i],'gray')
+#     plt.title(titles[i])
+#     plt.xticks([]),plt.yticks([])
+# plt.show()
+# #
+# text = pytesseract.image_to_string(th2)
+# print(text)
 
 
 
@@ -201,3 +201,93 @@ print(text)
 # # Print the extracted text
 # print("Extracted Text:")
 # print(text)
+
+#Working example of name extraction
+####################################################################################################################
+
+# import pytesseract
+# from PIL import Image
+# from src.imagetotext.textrecognition import ImageToText
+# from src.widgets.charstatus import CharStatus
+# import numpy as np
+# from matplotlib import pyplot as plt
+#
+#
+# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+#
+#
+# #image = Image.open('C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\utils\\screenshoot_lvl_1.PNG')
+#
+# img = cv2.imread("C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\utils\\screenshoot_lvl_1.PNG", cv2.IMREAD_GRAYSCALE)
+# img2 = img.copy()
+# #current_directory = os.getcwd()
+# #image_template = os.path.join(current_directory, 'images', 'char_status', 'LVL_target.PNG')
+# template = cv2.imread('C:\\Users\\negru\\PycharmProjects\\FlyffUHardcore\\images\\char_status\\LVL_target.PNG',  cv2.IMREAD_GRAYSCALE)
+# w, h = template.shape[::-1]
+#
+# # Apply template Matching
+# res = cv2.matchTemplate(img, template, cv2.TM_CCOEFF_NORMED)
+# min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+# top_left = max_loc
+# bottom_right = (top_left[0] + w, top_left[1] + h)
+#
+#
+#
+# new_targets = CharStatus(top_left, bottom_right)
+#
+# username_top_left, username_bottom_right = new_targets.usernamename_coordonates()
+#
+# # result = cv2.rectangle(img, username_top_left, username_bottom_right , color=(0, 255, 255), lineType=cv2.LINE_4)
+# result = img[username_top_left[1]:username_bottom_right[1], username_top_left[0]:username_bottom_right[0]]
+#
+#
+# _, binary_image = cv2.threshold(result, 128, 255, cv2.THRESH_TOZERO)
+#
+# # Display the original and blurred images (optional)
+# cv2.imshow('Original Image', result)
+# cv2.imshow('Blurred Image', binary_image)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+#
+#
+# # Perform OCR on the cropped image
+# text = pytesseract.image_to_string(binary_image)
+#
+# # Print the extracted text
+# print("Extracted Text:")
+# print(text)
+
+# Testing our classes
+########################################################################################################################
+# from time import time
+# from windowcapture import WindowCapture
+# from src.detection.vision import Vision
+#
+# import os
+#
+# current_directory = os.getcwd()
+#
+# image_path = os.path.join(current_directory, 'images', 'char_status', 'LVL_target.PNG')
+# print(image_path)
+#
+# wincap = WindowCapture('FlyffHarcore')
+#
+# lvl_target = Vision(image_path)
+#
+# loop_time = time()
+# wincap.start()
+# while (True):
+#
+#     # if we don't have a screenshot yet, don't run the code below this point yet
+#     if wincap.screenshot is None:
+#         continue
+#
+#     # display the processed image
+#     points = lvl_target.find(wincap.screenshot, method=cv2.TM_CCOEFF_NORMED)
+#
+#     # debug the loop rate
+#     print('FPS {}'.format(1 / (time() - loop_time)))
+#     loop_time = time()
+#     if points:
+#         break
+
