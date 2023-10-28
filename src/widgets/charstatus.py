@@ -7,8 +7,8 @@ class CharStatus():
         self.bottom_right = bottom_right
 
     def usernamename_coordonates(self):
-        username_bottom_right = (self.top_left[0], self.bottom_right[1])
-        username_top_left = (self.top_left[1], 0)
+        username_bottom_right = (self.top_left[0], self.bottom_right[1] + 5)
+        username_top_left = (self.top_left[1] + 5, 0)
         return username_top_left, username_bottom_right
 
     def level_coordonates(self):
