@@ -291,3 +291,38 @@ import cv2
 #     if points:
 #         break
 
+# Windows capture test
+########################################################################################################################
+import os
+import time
+from windowcapture import WindowCapture
+from src.detection.vision import Vision
+from PyQt5.QtCore import QObject, pyqtSignal
+import cv2 as cv
+
+script_directory = os.path.dirname(os.path.abspath(__file__))
+src_directory = os.path.join(script_directory, os.path.pardir)
+main_directory = os.path.join(src_directory, os.path.pardir)
+os.chdir(main_directory)
+image_path = os.path.join(os.getcwd(), 'images', 'char_status', 'LVL_target.PNG')
+print(f"Full image path: {image_path}")
+
+wincap = WindowCapture('Flyff Universe — Mozilla Firefox')
+wincap.list_window_names()
+#new_char = Vision(image_path)
+
+#loop_time = time()
+#wincap.start()
+while True:
+    # if wincap.screenshot is None:
+    #     continue
+
+    screenshot = wincap.get_screenshot()
+    cv.imwrite('result10.jpg', screenshot)
+    print('First screenshoot')
+
+    time.sleep(10)
+    screenshot2 = wincap.get_screenshot()
+    cv.imwrite('result111.jpg', screenshot2)
+    print('Second Screenshoot')
+    break
