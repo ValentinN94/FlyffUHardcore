@@ -3,6 +3,9 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 
 from src.threads.challenge import OverwatchWorker
+from windowcapture import WindowCapture
+import numpy as np
+
 
 
 # Create the main application window using QMainWindow.
@@ -57,6 +60,15 @@ class WebBrowser(QMainWindow):
             print("Overwatch failed.")
         self.overwatch_thread.quit()
         self.overwatch_thread.wait()
+
+    @pyqtSlot(np.ndarray)
+    def handle_screenshot_ready(self, screenshot):
+        if screenshot:
+            print('Screenshoot is here')
+
+
+
+# Handle the captured screenshot here
 
 app = QApplication([])
 window = WebBrowser()
