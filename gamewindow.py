@@ -17,6 +17,7 @@ class WebBrowser(QMainWindow):
         self.browser.setUrl(QUrl("https://universe.flyff.com/play"))
         self.setCentralWidget(self.browser)
         self.browser.loadFinished.connect(self.on_load_finished)
+        self.char_coords = None
 
     # Slot that is called when the web page finishes loading.
     @pyqtSlot(bool)
@@ -35,8 +36,11 @@ class WebBrowser(QMainWindow):
 
             if reply == QMessageBox.AcceptRole:
                 self.run_overwatch()
+               # print('challenge accepted vali  ' + str(char_coordonates))
+            elif reply == QMessageBox.Yes:
+                self.run_overwatch()
             else:
-                print("User does not want to continue.")
+                pass
         else:
             print("Page failed to load.")
 
@@ -55,7 +59,8 @@ class WebBrowser(QMainWindow):
         if success:
             print("Overwatch finished successfully.")
             top_left, bottom_right = self.overwatch_worker.points
-            print(top_left, bottom_right)
+            self.char_coords = (top_left, bottom_right)
+            print('''char coords here''' + str(self.char_coords))
         else:
             print("Overwatch failed.")
         self.overwatch_thread.quit()
