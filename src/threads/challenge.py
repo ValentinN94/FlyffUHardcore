@@ -1,10 +1,8 @@
 import os
 from time import time
-
+from windowcapture import WindowCapture
 from src.detection.vision import Vision
 from PyQt5.QtCore import QObject, pyqtSignal
-from windowcapture import WindowCapture
-import cv2 as cv
 
 class OverwatchWorker(QObject):
     finished = pyqtSignal(bool)
@@ -21,15 +19,16 @@ class OverwatchWorker(QObject):
         new_char = Vision(image_path)
 
         loop_time = time()
-        wincap.capture_and_emit_screenshot()
-        counter = 0
+        wincap.start()
         while True:
+            if wincap.screenshot is None:
+                continue
 
-            self.points = new_char.find(wincap.get_screenshot())
+            self.points = new_char.find(wincap.screenshot)
 
             print('FPS {}'.format(1 / (time() - loop_time)))
             loop_time = time()
-            cv.imwrite('result' + str(counter) + '.jpg', wincap.get_screenshot())
+
             if self.points:
                 self.finished.emit(True)
                 return
